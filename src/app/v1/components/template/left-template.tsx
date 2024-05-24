@@ -26,12 +26,12 @@ export default function LeftTemplate({
       <Tabs
         defaultValue={String(items[0].id)}
         className={cn(
-          "flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 shadow-lg  min-h-svh ",
+          "flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 shadow-lg  min-h-svh bg-background",
           className
         )}
       >
         <aside className="max-h-svh lg:min-w-56  border border-border px-4">
-          <p className=" sm:text-4xl mb-4">{name[0]}</p>
+          <p className=" sm:text-4xl mb-4">{name}</p>
           <TabsList className=" w-full h-fit flex flex-row lg:flex-col gap-2 justify-start items-start bg-background group">
             {items
               .sort((a, b) => a.sortOrder - b.sortOrder)

@@ -30,11 +30,11 @@ export default function TopTemplate({
       <Tabs
         defaultValue={String(items[0].id)}
         className={cn(
-          "flex flex-col space-y-8  shadow-lg  min-h-svh w-dvw",
+          "flex flex-col   shadow-lg  min-h-svh w-screen bg-background",
           className
         )}
       >
-        <TabsList className=" min-w-max flex justify-between items-center sticky top-0 z-20 shadow-lg py-4 p-8  backdrop-blur-sm bg-background/90  supports-[backdrop-filter]:bg-background/10 group">
+        <TabsList className=" min-w-full flex justify-between items-center sticky top-0 z-20 shadow-lg py-4 p-8  backdrop-blur-sm bg-background/90  supports-[backdrop-filter]:bg-background/10 group">
           <div className=" flex items-center gap-3">
             <Link href={"/"}>
               <span className="text-3xl md:text-5xl font-bold text-primary">

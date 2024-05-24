@@ -106,26 +106,36 @@ model pages {
 }
 
 model sections {
-  id          String      @id @default(cuid())
-  type        SectionType
-  title       String      @default("Unlock the Power of Collaboration")
-  text        String      @default("Empower your team to innovate faster with our all-in-one platform for building, deploying, and scaling web applications.")
-  image       String?     @default("/placeholder-image.svg")
-  description String?
-  link        String?
-  name        String?
-  page_id     String
-  customData  Json[]      @default([])
-  version     String      @default("v0")
-  pages       pages       @relation(fields: [page_id], references: [id])
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id         String      @id @default(cuid())
+  type       SectionType
+  title      String      @default("Unlock the Power of Collaboration")
+  text       String      @default("Empower your team to innovate faster with our all-in-one platform for building, deploying, and scaling web applications.")
+  image      String?     @default("/placeholder-image.svg")
+  page_id    String
+  customData Json[]      @default([])
+  version    String      @default("v0")
+  pages      pages       @relation(fields: [page_id], references: [id])
+  items      items[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
 enum SectionType {
   hero
   about
   projects
+}
+
+model items {
+  id          String   @id @default(cuid())
+  section_id  String
+  image       String?
+  description String?
+  link        String?
+  name        String?
+  sections    sections @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 // model aboutSection {

@@ -37,7 +37,7 @@ export function HeroSectionV0({ section }: { section: sections }) {
     }
   }
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48  bg-gray-900 text-white group transition-all duration-300 delay-300 relative">
+    <section className="w-full  min-h-svh flex justify-center  items-center  bg-gray-900 text-white group transition-all duration-300 delay-300 relative">
       <div className="container px-4 md:px-6">
         <div className="transition-all duration-300 delay-300 absolute right-0 top-0 hidden group-hover:block">
           <EditHeroSection section={section} />

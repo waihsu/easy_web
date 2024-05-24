@@ -1,7 +1,5 @@
-import {
-  getPagesByPortfolioId,
-  getPortfolioById,
-} from "@/app/server/portfolio";
+import { getPagesByPortfolioId } from "@/app/server/portfolio";
+import { getPortfolio } from "@/app/server/public";
 import LeftTemplate from "@/app/v1/components/template/left-template";
 import TopTemplate from "@/app/v1/components/template/top-template";
 import React from "react";
@@ -12,7 +10,7 @@ export default async function page({
   params: { portfolioId: string };
 }) {
   const { portfolioId } = params;
-  const portfolio = await getPortfolioById(portfolioId);
+  const portfolio = await getPortfolio({ portfolio_id: portfolioId });
   const pages = await getPagesByPortfolioId(portfolioId);
   const routes =
     pages &&
@@ -25,11 +23,7 @@ export default async function page({
   if (portfolio?.template === "top") {
     return (
       <div>
-        <TopTemplate
-          items={routes}
-          name={portfolio?.name as string}
-          className="container "
-        />
+        <TopTemplate items={routes} name={portfolio?.name as string} />
       </div>
     );
   }

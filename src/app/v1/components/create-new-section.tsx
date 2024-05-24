@@ -70,6 +70,17 @@ const Sections = [
       },
     ],
   },
+  {
+    name: "Project Section",
+    items: [
+      {
+        type: SectionType.projects,
+        version: "v0",
+        image: "/projects-v0.png",
+        customData: undefined,
+      },
+    ],
+  },
 ];
 
 export default function CreateNewSection({ pageId }: { pageId: string }) {

@@ -90,7 +90,10 @@ export async function getPagesByPortfolioId(id: string) {
 
 export async function getSectionsByPageId(page_id: string) {
   try {
-    const secitons = await prisma.sections.findMany({ where: { page_id } });
+    const secitons = await prisma.sections.findMany({
+      where: { page_id },
+      include: { items: true },
+    });
     return secitons;
   } catch (err) {
     console.log(err);
@@ -111,14 +114,29 @@ export async function createSection({
   customData?: [];
 }) {
   try {
-    console.log(customData);
+    if (type === "projects") {
+      const newSection = await prisma.sections.create({
+        data: {
+          page_id: pageId,
+          type,
+          version,
+          title: "Our Creative Projects",
+          text: "Explore our collection of visually stunning and innovative projects that showcase our design expertise.",
+        },
+      });
+      await prisma.items.create({ data: { section_id: newSection.id } });
+      revalidatePath(`/v1/admin/${pageId}`);
+      return { messg: "successful" };
+    }
     if (!customData) {
       const newSection = await prisma.sections.create({
         data: { page_id: pageId, type, version },
       });
+
       revalidatePath(`/v1/admin/${pageId}`);
       return { messg: "successful" };
     }
+
     const newSection = await prisma.sections.create({
       data: { page_id: pageId, type, version, customData },
     });
@@ -169,6 +187,32 @@ export async function deleteSection(id: string) {
     return { messg: "successful" };
   } catch (err) {
     console.log(err);
+    return { messg: "error" };
+  }
+}
+
+// Section Items
+
+export async function createItems({
+  section_id,
+  name,
+  description,
+  link,
+  image,
+}: {
+  section_id: string;
+  name?: string;
+  description?: string;
+  link?: string;
+  image?: string;
+}) {
+  try {
+    await prisma.items.create({
+      data: { section_id, name, description, link, image },
+    });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
     return { messg: "error" };
   }
 }
