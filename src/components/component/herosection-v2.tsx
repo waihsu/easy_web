@@ -21,9 +21,10 @@ To read more about using these font, please visit the Next.js documentation:
 import { deleteSection } from "@/app/server/portfolio";
 import DeleteDialog from "@/app/v1/components/delete-dialog";
 import EditHeroSection from "@/app/v1/components/edit-hero-section";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { sections } from "@prisma/client";
 import { toast } from "../ui/use-toast";
+import Link from "next/link";
 
 export function HeroSectionV2({ section }: { section: sections }) {
   async function onDelete() {
@@ -49,7 +50,12 @@ export function HeroSectionV2({ section }: { section: sections }) {
             {section.text}
           </p>
           <div className="flex flex-col gap-2 min-[400px]:flex-row">
-            <Button variant="default">Get Started</Button>
+            <Link
+              className={buttonVariants({ variant: "default" })}
+              href={String(section.link)}
+            >
+              Get Started
+            </Link>
             <Button variant="secondary">Learn More</Button>
           </div>
         </div>

@@ -5,8 +5,10 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Sections from "../sections";
 import EditSideBarSort from "../edit-sidebar-sort";
+import { FooterV0 } from "@/components/component/footer-v0";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLElement> {
+  portfolioId: string;
   name: string;
   items: {
     id: string;
@@ -16,6 +18,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLElement> {
 }
 
 export default function LeftTemplate({
+  portfolioId,
   className,
   children,
   items,
@@ -30,7 +33,7 @@ export default function LeftTemplate({
           className
         )}
       >
-        <aside className="max-h-svh lg:min-w-56  border border-border px-4">
+        <aside className="max-h-svh lg:min-w-56   px-4">
           <p className=" sm:text-4xl mb-4">{name}</p>
           <TabsList className=" w-full h-fit flex flex-row lg:flex-col gap-2 justify-start items-start bg-background group">
             {items
@@ -59,6 +62,7 @@ export default function LeftTemplate({
             className="w-full md:min-w-[200px]"
           >
             <Sections pageId={item.id} />
+            <FooterV0 name={name} portfolioId={portfolioId} />
           </TabsContent>
         ))}
       </Tabs>

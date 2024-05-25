@@ -30,6 +30,7 @@ export default async function Portfolio({
           items={routes}
           name={portfolio?.name as string}
           className="container "
+          portfolioId={id}
         />
       </div>
     );
@@ -40,6 +41,7 @@ export default async function Portfolio({
         className="container"
         items={routes}
         name={portfolio?.name as string}
+        portfolioId={id}
       />
     </div>
   );

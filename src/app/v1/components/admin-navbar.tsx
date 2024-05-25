@@ -18,12 +18,14 @@ export default async function AdminNavbar({
   const user = await getCurrentUser();
   return (
     <div className=" min-w-full flex justify-between items-center  z-40 shadow-lg py-4 px-8 sticky top-0 backdrop-blur-sm bg-background">
-      <div className="flex gap-3">
-        <p className=" sm:text-4xl">{user?.name}</p>
+      <div className="flex gap-3 items-center">
+        <Link href={"/v1/dashboard"} className=" sm:text-4xl">
+          {user?.name}
+        </Link>
 
         <CopyLink link={`http://localhost:3000/public/${portfolioId}`} />
       </div>
-      <div>
+      <div className="flex items-center gap-2">
         {user ? (
           <DropdownProfile user={user} />
         ) : (

@@ -27,6 +27,8 @@ import Link from "next/link";
 import { toast } from "../ui/use-toast";
 import AddItems from "@/app/v1/components/add-items";
 import { useRouter } from "next/navigation";
+import EditItems from "@/app/v1/components/edit-items";
+import Image from "next/image";
 
 export function ProjectsSectionV0({
   section,
@@ -35,7 +37,6 @@ export function ProjectsSectionV0({
   section: sections;
   items: items[];
 }) {
-  const router = useRouter();
   async function onDelete() {
     const { messg } = await deleteSection(section.id);
     if (messg === "error") {
@@ -45,7 +46,7 @@ export function ProjectsSectionV0({
     }
   }
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 relative group">
+    <section className="w-full py-12 md:py-24 lg:py-32 relative group container">
       <div className="hidden group-hover:flex justify-center  items-center transition-all duration-300 delay-300 absolute left-0 top-0">
         <AddItems section_id={section.id} />
       </div>
@@ -67,14 +68,18 @@ export function ProjectsSectionV0({
         {items.map((item) => (
           <div
             key={item.id}
-            className="group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
+            className="group/item relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
           >
+            <div className="hidden group-hover/item:block absolute bottom-0 right-0">
+              <EditItems item={item} />
+            </div>
             <Link href="#">
-              <img
+              <Image
                 alt="Project 1"
-                className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                className="w-full h-64 object-cover group-hover/item:scale-105 transition-transform duration-300 ease-in-out"
                 height={400}
-                src="/placeholder.svg"
+                src={item.image ? item.image : "/placeholder.svg"}
+                quality={100}
                 style={{
                   aspectRatio: "600/400",
                   objectFit: "cover",

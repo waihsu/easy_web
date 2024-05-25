@@ -32,6 +32,7 @@ import { sections } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "../ui/use-toast";
+import { buttonVariants } from "../ui/button";
 
 export function HeroSectionV1({ section }: { section: sections }) {
   async function onDelete() {
@@ -77,8 +78,8 @@ export function HeroSectionV1({ section }: { section: sections }) {
         </p>
         <div className="mt-10">
           <Link
-            className="inline-flex items-center justify-center rounded-md bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            href="#"
+            className={buttonVariants({ variant: "default" })}
+            href={String(section.link)}
           >
             Get Started
           </Link>

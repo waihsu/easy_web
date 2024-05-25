@@ -93,6 +93,7 @@ export async function getSectionsByPageId(page_id: string) {
     const secitons = await prisma.sections.findMany({
       where: { page_id },
       include: { items: true },
+      orderBy: { createdAt: "asc" },
     });
     return secitons;
   } catch (err) {
@@ -114,7 +115,20 @@ export async function createSection({
   customData?: [];
 }) {
   try {
-    if (type === "projects") {
+    if (type === "hero") {
+      await prisma.sections.create({
+        data: {
+          page_id: pageId,
+          type,
+          version,
+          title: "Unlock the Power of Collaboration",
+          text: "Empower your team to innovate faster with our all-in-one platform for building, deploying, and scaling web applications.",
+        },
+      });
+
+      revalidatePath(`/v1/admin/${pageId}`);
+      return { messg: "successful" };
+    } else if (type === "projects") {
       const newSection = await prisma.sections.create({
         data: {
           page_id: pageId,
@@ -127,21 +141,43 @@ export async function createSection({
       await prisma.items.create({ data: { section_id: newSection.id } });
       revalidatePath(`/v1/admin/${pageId}`);
       return { messg: "successful" };
-    }
-    if (!customData) {
-      const newSection = await prisma.sections.create({
-        data: { page_id: pageId, type, version },
-      });
+    } else if (type === "about") {
+      if (!customData) {
+        const newSection = await prisma.sections.create({
+          data: { page_id: pageId, type, version },
+        });
 
+        revalidatePath(`/v1/admin/${pageId}`);
+        return { messg: "successful" };
+      }
+
+      const newSection = await prisma.sections.create({
+        data: { page_id: pageId, type, version, customData },
+      });
       revalidatePath(`/v1/admin/${pageId}`);
       return { messg: "successful" };
+    } else if (type === "gallery") {
+      const newSection = await prisma.sections.create({
+        data: {
+          page_id: pageId,
+          type,
+          version,
+          title: "Gallery",
+          text: "Explore our collection of stunning images.",
+        },
+      });
+      await prisma.items.create({
+        data: {
+          section_id: newSection.id,
+          name: "Architectural Masterpiece",
+          description: "A stunning modern building design.",
+        },
+      });
+      revalidatePath(`/v1/admin/${pageId}`);
+      return { messg: "successful" };
+    } else {
+      return { messg: "wrong" };
     }
-
-    const newSection = await prisma.sections.create({
-      data: { page_id: pageId, type, version, customData },
-    });
-    revalidatePath(`/v1/admin/${pageId}`);
-    return { messg: "successful" };
   } catch (err) {
     console.log(err);
     return { messg: "error" };
@@ -154,24 +190,26 @@ export async function updateSection({
   text,
   image,
   customData,
+  link,
 }: {
   id: string;
   title: string;
   text: string;
   image?: string | undefined;
+  link?: string | null;
   customData?: { key: string; value: string }[];
 }) {
   try {
     if (customData) {
       await prisma.sections.update({
         where: { id },
-        data: { title, text, image, customData },
+        data: { title, text, image, customData, link },
       });
       return { messg: "successful" };
     }
     await prisma.sections.update({
       where: { id },
-      data: { title, text, image },
+      data: { title, text, image, link },
     });
     return { messg: "successful" };
   } catch (err) {
@@ -217,6 +255,31 @@ export async function createItems({
   }
 }
 
+export async function updateItems({
+  id,
+  name,
+  description,
+  link,
+  image,
+}: {
+  id: string;
+  name?: string | null;
+  description?: string | null;
+  link?: string | null;
+  image?: string | null;
+}) {
+  try {
+    await prisma.items.update({
+      where: { id },
+      data: { name, description, link, image },
+    });
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
 // Page
 export async function createPage({
   title,
@@ -254,6 +317,61 @@ export async function updatePageOrder({
     revalidatePath("/v1/admin/");
     return { messg: "successful" };
   } catch (err) {
+    return { messg: "error" };
+  }
+}
+
+export async function getSocialLinks(portfolio_id: string) {
+  try {
+    const sociallinks = await prisma.sociallink.findMany({
+      where: { portfolio_id },
+    });
+    return sociallinks;
+  } catch (err) {
+    return [];
+  }
+}
+
+export async function createSocialLink({
+  icon,
+  portfolioId,
+  link,
+}: {
+  icon: string;
+  portfolioId: string;
+  link: string;
+}) {
+  try {
+    await prisma.sociallink.create({
+      data: { icon, portfolio_id: portfolioId, link },
+    });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
+export async function updateSocialLink({
+  id,
+  icon,
+  link,
+  portfolio_id,
+}: {
+  id: string;
+  icon: string;
+  link: string;
+  portfolio_id: string;
+}) {
+  try {
+    await prisma.sociallink.update({
+      where: { id },
+      data: { icon, link, portfolio_id },
+    });
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
     return { messg: "error" };
   }
 }

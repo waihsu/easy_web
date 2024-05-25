@@ -23,7 +23,7 @@ export default function CopyLink({ link }: { link: string }) {
 
   return (
     <div>
-      <p>{link}</p>
+      {/* <p>{link}</p> */}
       <Button onClick={copyLinkToClipboard} variant={"ghost"} size={"icon"}>
         <Copy />
       </Button>

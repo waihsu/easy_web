@@ -9,6 +9,9 @@ import { AboutSectionV0 } from "@/components/component/aboutsection-v0";
 import { AboutSectionV1 } from "@/components/component/aboutsection-v1";
 import { AboutSectionV2 } from "@/components/component/aboutsection-v2";
 import { ProjectsSectionV0 } from "@/components/component/projectsection-v0";
+import { GalleryV0 } from "@/components/component/gallery-v0";
+import { GalleryV1 } from "@/components/component/gallery-v1";
+import { GalleryV2 } from "@/components/component/gallery-v2";
 
 export default async function Sections({ pageId }: { pageId: string }) {
   const sections = await getSectionsByPageId(pageId);
@@ -53,6 +56,16 @@ export const renderSection = ({
       return (
         <ProjectsSectionV0 key={section.id} section={section} items={items} />
       );
+  } else if (type === "gallery") {
+    if (version === "v0") {
+      return <GalleryV0 key={section.id} section={section} items={items} />;
+    }
+    if (version === "v1") {
+      return <GalleryV1 key={section.id} section={section} items={items} />;
+    }
+    if (version === "v2") {
+      return <GalleryV2 key={section.id} section={section} items={items} />;
+    }
   }
 
   return null;

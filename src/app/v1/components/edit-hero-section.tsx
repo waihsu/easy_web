@@ -37,6 +37,7 @@ const formSchema = z.object({
   text: z
     .string()
     .min(10, { message: "Text must be at least more than 10 characters" }),
+  link: z.string().nullish(),
   image: z.string().optional(),
 });
 
@@ -118,6 +119,24 @@ export default function EditHeroSection({ section }: { section: sections }) {
               />
               <FormField
                 control={form.control}
+                name="link"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Link</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Link"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="image"
                 render={({ field }) => (
                   <FormItem>
@@ -129,16 +148,17 @@ export default function EditHeroSection({ section }: { section: sections }) {
                           form.setValue("image", files[0].url);
                           setUploaded(true);
                         }}
-                        className="max-h-40 p-0 m-0"
+                        className="max-h-40 p-0 m-0 "
                         appearance={{
                           button: buttonVariants({
                             size: "sm",
                             className: "h-32",
                           }),
+                          allowedContent: "text-xl",
                         }}
                         content={{
                           allowedContent: uploaded
-                            ? "image uploaded"
+                            ? "image uploaded successful"
                             : "image (4MB)",
                         }}
                       />

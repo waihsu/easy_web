@@ -81,6 +81,29 @@ const Sections = [
       },
     ],
   },
+  {
+    name: "Gallery Section",
+    items: [
+      {
+        type: SectionType.gallery,
+        version: "v0",
+        image: "/gallery-v0.png",
+        customData: undefined,
+      },
+      {
+        type: SectionType.gallery,
+        version: "v1",
+        image: "/gallery-v1.png",
+        customData: undefined,
+      },
+      {
+        type: SectionType.gallery,
+        version: "v2",
+        image: "/gallery-v2.png",
+        customData: undefined,
+      },
+    ],
+  },
 ];
 
 export default function CreateNewSection({ pageId }: { pageId: string }) {
@@ -131,8 +154,10 @@ export default function CreateNewSection({ pageId }: { pageId: string }) {
               <CardContent>
                 {Sections.map((section, index) => (
                   <div key={index}>
-                    <h1 className=" text-2xl my-3">{section.name}</h1>
-                    <div className=" grid md:grid-cols-2 ">
+                    <h1 className=" text-2xl my-3 font-semibold">
+                      {section.name}
+                    </h1>
+                    <div className=" grid md:grid-cols-2 space-x">
                       {section.items.map((item, index) => (
                         <SectionCard
                           setOpen={setOpen}
@@ -182,7 +207,7 @@ function SectionCard({
 }: Props) {
   return (
     <Card
-      className=" sm:max-w-sm h-56 relative flex flex-col"
+      className=" sm:max-w-sm h-56 relative flex flex-col my-2"
       onClick={() => {
         onSubmint();
         setOpen(false);

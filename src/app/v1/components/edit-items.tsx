@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { sections } from "@prisma/client";
+import { items, sections } from "@prisma/client";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
@@ -25,53 +25,45 @@ import {
 import { Input } from "@/components/ui/input";
 import { UploadButton, UploadDropzone } from "@/utils/uploadthings";
 import { Textarea } from "@/components/ui/textarea";
-import { updateSection } from "@/app/server/portfolio";
+import {
+  createItems,
+  updateItems,
+  updateSection,
+} from "@/app/server/portfolio";
 import { toast } from "@/components/ui/use-toast";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { Edit } from "lucide-react";
 
-const formSchema = z.object({
+const itemSchema = z.object({
   id: z.string(),
-  title: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  text: z
-    .string()
-    .min(10, { message: "Text must be at least more than 10 characters" }),
-  image: z.string().optional(),
-  customData: z.array(
-    z.object({
-      key: z.string(),
-      value: z.string(),
-    })
-  ),
+  image: z.string().nullish(),
+  description: z.string().nullish(),
+  link: z.string().nullish(),
+  name: z.string().nullish(),
 });
-type CustomDataItem = {
-  key: string;
-  value: string;
-};
-export default function EditAboutSection({ section }: { section: sections }) {
+
+export default function EditItems({ item }: { item: items }) {
   const pathname = usePathname();
   const router = useRouter();
   const [uploaded, setUploaded] = useState(false);
   const [open, setOpen] = useState(false);
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+
+  const form = useForm<z.infer<typeof itemSchema>>({
+    resolver: zodResolver(itemSchema),
     defaultValues: {
-      id: section.id,
-      title: section.title,
-      text: section.text,
-      image: section.image as string,
-      customData: (section.customData as CustomDataItem[]) || [],
+      id: item.id as string,
+      description: item.description as string,
+      image: item.image as string,
+      link: item.link as string,
+      name: item.name as string,
     },
   });
 
-  // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    const { messg } = await updateSection(values);
+  async function onSubmit(values: z.infer<typeof itemSchema>) {
+    const validValues = itemSchema.safeParse(values);
+    console.log(validValues);
     setOpen(false);
+    const { messg } = await updateItems(values);
     if (messg === "error") {
       toast({ title: messg });
       router.refresh();
@@ -81,39 +73,36 @@ export default function EditAboutSection({ section }: { section: sections }) {
     }
   }
 
-  const { fields, append, remove } = useFieldArray({
-    name: "customData",
-    control: form.control,
-  });
-
-  const addCustomField = () => {
-    append({ key: "", value: "" });
-  };
-
   return (
     <div className={pathname.startsWith("/v1") ? "inline" : "hidden"}>
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger asChild>
-          <Button>Edit</Button>
+          <Button size={"icon"}>
+            <Edit />
+          </Button>
         </DialogTrigger>
         <DialogContent className="max-h-[90%] overflow-y-scroll">
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
+            <DialogTitle>Edit Items</DialogTitle>
+            {/* <DialogDescription>
               This action cannot be undone. This will permanently delete your
               account and remove your data from our servers.
-            </DialogDescription>
+            </DialogDescription> */}
           </DialogHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="title"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Title" {...field} />
+                      <Input
+                        placeholder="Name"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                     </FormControl>
 
                     <FormMessage />
@@ -122,7 +111,7 @@ export default function EditAboutSection({ section }: { section: sections }) {
               />
               <FormField
                 control={form.control}
-                name="text"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Text</FormLabel>
@@ -131,6 +120,7 @@ export default function EditAboutSection({ section }: { section: sections }) {
                         {...field}
                         placeholder="Type your message here."
                         id="message"
+                        value={field.value ?? ""}
                       />
                     </FormControl>
 
@@ -138,60 +128,24 @@ export default function EditAboutSection({ section }: { section: sections }) {
                   </FormItem>
                 )}
               />
-              <div>
-                {fields.map((field, index) => (
-                  <div className="flex gap-2" key={field.id}>
-                    <FormField
-                      control={form.control}
-                      name={`customData.${index}.key`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder="Type your message here."
-                              id="message"
-                            />
-                          </FormControl>
+              <FormField
+                control={form.control}
+                name="link"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Link</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Link"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
 
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`customData.${index}.value`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder="Type your message here."
-                              id="message"
-                            />
-                          </FormControl>
-
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <button type="button" onClick={() => remove(index)}>
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <div className=" flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="mt-2"
-                    onClick={addCustomField}
-                  >
-                    Add CustomData
-                  </Button>
-                </div>
-              </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="image"

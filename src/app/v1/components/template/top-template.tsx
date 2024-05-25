@@ -9,8 +9,10 @@ import { Navbar } from "../nav-bar";
 import { ThemeIcon } from "@/components/ThemeIcon";
 import Link from "next/link";
 import MobileNav from "@/components/mobile-nav";
+import { FooterV0 } from "@/components/component/footer-v0";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLElement> {
+  portfolioId: string;
   name: string;
   items: {
     id: string;
@@ -20,6 +22,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLElement> {
 }
 
 export default function TopTemplate({
+  portfolioId,
   className,
   children,
   items,
@@ -34,7 +37,7 @@ export default function TopTemplate({
           className
         )}
       >
-        <TabsList className=" min-w-full flex justify-between items-center sticky top-0 z-20 shadow-lg py-4 p-8  backdrop-blur-sm bg-background/90  supports-[backdrop-filter]:bg-background/10 group">
+        <TabsList className=" w-full flex justify-between items-center sticky top-0 z-20 shadow-lg py-4 p-8  backdrop-blur-sm bg-background/90  supports-[backdrop-filter]:bg-background/10 group">
           <div className=" flex items-center gap-3">
             <Link href={"/"}>
               <span className="text-3xl md:text-5xl font-bold text-primary">
@@ -59,6 +62,7 @@ export default function TopTemplate({
             className="w-full md:min-w-[200px] "
           >
             <Sections pageId={item.id} />
+            <FooterV0 name={name} portfolioId={portfolioId} />
           </TabsContent>
         ))}
       </Tabs>
