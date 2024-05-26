@@ -100,7 +100,7 @@ model pages {
   title        String     @default("Home")
   sortOrder    Int        @default(0)
   portfolio_id String
-  portfolios   portfolios @relation(fields: [portfolio_id], references: [id])
+  portfolios   portfolios @relation(fields: [portfolio_id], references: [id], onDelete: Cascade)
   sections     sections[]
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -116,8 +116,9 @@ model sections {
   page_id    String
   customData Json[]      @default([])
   version    String      @default("v0")
-  pages      pages       @relation(fields: [page_id], references: [id])
+  pages      pages       @relation(fields: [page_id], references: [id], onDelete: Cascade)
   items      items[]
+  skills     skills[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -127,6 +128,7 @@ enum SectionType {
   about
   projects
   gallery
+  skill
   footer
 }
 
@@ -142,12 +144,22 @@ model items {
   updatedAt   DateTime @updatedAt
 }
 
+model skills {
+  id         String   @id @default(cuid())
+  section_id String
+  name       String
+  percent    String?
+  sections   sections @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 model sociallink {
   id           String     @id @default(cuid())
   icon         String
   link         String
   portfolio_id String
-  portfolios   portfolios @relation(fields: [portfolio_id], references: [id])
+  portfolios   portfolios @relation(fields: [portfolio_id], references: [id], onDelete: Cascade)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }

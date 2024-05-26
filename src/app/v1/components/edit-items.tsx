@@ -27,12 +27,14 @@ import { UploadButton, UploadDropzone } from "@/utils/uploadthings";
 import { Textarea } from "@/components/ui/textarea";
 import {
   createItems,
+  deleteItem,
   updateItems,
   updateSection,
 } from "@/app/server/portfolio";
 import { toast } from "@/components/ui/use-toast";
 import { usePathname, useRouter } from "next/navigation";
 import { Edit } from "lucide-react";
+import DeleteDialog from "./delete-dialog";
 
 const itemSchema = z.object({
   id: z.string(),
@@ -64,6 +66,18 @@ export default function EditItems({ item }: { item: items }) {
     console.log(validValues);
     setOpen(false);
     const { messg } = await updateItems(values);
+    if (messg === "error") {
+      toast({ title: messg });
+      router.refresh();
+    } else {
+      toast({ title: messg });
+      router.refresh();
+    }
+  }
+
+  async function onDelete() {
+    setOpen(false);
+    const { messg } = await deleteItem(item.id);
     if (messg === "error") {
       toast({ title: messg });
       router.refresh();
@@ -179,7 +193,10 @@ export default function EditItems({ item }: { item: items }) {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <div className="flex items-center justify-between">
+                <Button type="submit">Submit</Button>
+                <DeleteDialog callback={onDelete} />
+              </div>
             </form>
           </Form>
         </DialogContent>

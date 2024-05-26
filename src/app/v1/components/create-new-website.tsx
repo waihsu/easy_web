@@ -60,9 +60,7 @@ export default function CreateNewWeb() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"ghost"} size={"sm"}>
-          Create new website
-        </Button>
+        <Button size={"sm"}>Create new website</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

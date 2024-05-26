@@ -25,6 +25,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createPage } from "@/app/server/portfolio";
 import { toast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -34,6 +35,7 @@ const formSchema = z.object({
 });
 
 export function CreatePage({ portfolioId }: { portfolioId: string }) {
+  const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,6 +47,7 @@ export function CreatePage({ portfolioId }: { portfolioId: string }) {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { messg } = await createPage(values);
+    setOpen(false);
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
     } else {
@@ -52,9 +55,11 @@ export function CreatePage({ portfolioId }: { portfolioId: string }) {
     }
   }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild>
-        <Button variant="outline">Create Page</Button>
+        <Button onClick={() => setOpen(!open)} variant="outline">
+          Create Page
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

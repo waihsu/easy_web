@@ -19,7 +19,7 @@ export default function DeleteDialog({ callback }: { callback: () => void }) {
     <div className={pathname.startsWith("/v1") ? "inline" : "hidden"}>
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger asChild>
-          <Button className="  ">Delete</Button>
+          <Button variant={"destructive"}>Delete</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -30,7 +30,9 @@ export default function DeleteDialog({ callback }: { callback: () => void }) {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => setOpen(!open)}>Cancle</Button>
+            <Button onClick={() => setOpen(!open)} variant={"outline"}>
+              Cancle
+            </Button>
             <Button
               onClick={() => {
                 callback();

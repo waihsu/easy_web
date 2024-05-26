@@ -23,7 +23,11 @@ export default async function page({
   if (portfolio?.template === "top") {
     return (
       <div>
-        <TopTemplate items={routes} name={portfolio?.name as string} />
+        <TopTemplate
+          items={routes}
+          name={portfolio?.name as string}
+          portfolioId={portfolioId}
+        />
       </div>
     );
   }
@@ -33,6 +37,7 @@ export default async function page({
         className="container"
         items={routes}
         name={portfolio?.name as string}
+        portfolioId={portfolioId}
       />
     </div>
   );

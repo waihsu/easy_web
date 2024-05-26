@@ -20,10 +20,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { z } from "zod";
+import { boolean, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createSocialLink } from "@/app/server/portfolio";
+import { createSkill, deleteSkill, updateSkill } from "@/app/server/portfolio";
 import { toast } from "@/components/ui/use-toast";
 import {
   Select,
@@ -33,36 +33,35 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { usePathname } from "next/navigation";
-import { FaFacebook, FaTiktok, FaTwitter, FaYoutube } from "react-icons/fa";
+import { icons } from "@/components/component/skills-v0";
 import { useState } from "react";
+import { skills } from "@prisma/client";
+import { Edit } from "lucide-react";
+import DeleteDialog from "./delete-dialog";
 
 const formSchema = z.object({
-  icon: z.string(),
-  portfolioId: z.string(),
-  link: z.string(),
+  id: z.string(),
+  name: z.string(),
+  section_id: z.string(),
+  percent: z.string().nullish(),
 });
-const icons = [
-  { name: "facebook", icon: <FaFacebook /> },
-  { name: "twitter", icon: <FaTwitter /> },
-  { name: "youtube", icon: <FaYoutube /> },
-  { name: "tiktok", icon: <FaTiktok /> },
-];
 
-export function CreateSocialLink({ portfolioId }: { portfolioId: string }) {
+export function EditSkill({ skill }: { skill: skills }) {
   const [open, setOpen] = useState<boolean>(false);
   const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      icon: "",
-      portfolioId: portfolioId,
-      link: "",
+      id: skill.id,
+      name: skill.name,
+      section_id: skill.section_id,
+      percent: skill.percent,
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { messg } = await createSocialLink(values);
+    const { messg } = await updateSkill(values);
     setOpen(false);
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
@@ -70,15 +69,28 @@ export function CreateSocialLink({ portfolioId }: { portfolioId: string }) {
       toast({ title: messg });
     }
   }
+
+  async function onDelete() {
+    const { messg } = await deleteSkill(skill.id);
+    setOpen(false);
+    if (messg === "error") {
+      toast({ title: messg, variant: "destructive" });
+    } else {
+      toast({ title: messg });
+    }
+  }
+
   return (
     <div className={pathname.startsWith("/v1") ? "inline" : "hidden"}>
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger asChild>
-          <Button variant="outline">create social link</Button>
+          <Button variant="outline" size={"icon"}>
+            <Edit />
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Link</DialogTitle>
+            <DialogTitle>Edit Skill</DialogTitle>
             {/* <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription> */}
@@ -87,7 +99,7 @@ export function CreateSocialLink({ portfolioId }: { portfolioId: string }) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="icon"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Icons</FormLabel>
@@ -103,7 +115,7 @@ export function CreateSocialLink({ portfolioId }: { portfolioId: string }) {
                       <SelectContent>
                         {icons.map((item) => (
                           <SelectItem value={item.name} key={item.name}>
-                            {item.icon}
+                            {item.icon} <span>{item.name}</span>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -115,19 +127,26 @@ export function CreateSocialLink({ portfolioId }: { portfolioId: string }) {
               />
               <FormField
                 control={form.control}
-                name="link"
+                name="percent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Link</FormLabel>
+                    <FormLabel>Percent</FormLabel>
                     <FormControl>
-                      <Input placeholder="Link" {...field} />
+                      <Input
+                        placeholder="Percent"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                     </FormControl>
-                    <FormDescription>This is social link..</FormDescription>
+                    <FormDescription>This is optional..</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <div className="flex items-center justify-between">
+                <Button type="submit">Submit</Button>
+                <DeleteDialog callback={onDelete} />
+              </div>
             </form>
           </Form>
         </DialogContent>

@@ -6,6 +6,9 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import Sections from "../sections";
 import EditSideBarSort from "../edit-sidebar-sort";
 import { FooterV0 } from "@/components/component/footer-v0";
+import { ThemeIcon } from "@/components/ThemeIcon";
+import MobileNav from "../mobile-navbar";
+import { EditWebsiteName } from "../edit-website-name";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLElement> {
   portfolioId: string;
@@ -33,26 +36,39 @@ export default function LeftTemplate({
           className
         )}
       >
-        <aside className="max-h-svh lg:min-w-56   px-4">
-          <p className=" sm:text-4xl mb-4">{name}</p>
-          <TabsList className=" w-full h-fit flex flex-row lg:flex-col gap-2 justify-start items-start bg-background group">
-            {items
-              .sort((a, b) => a.sortOrder - b.sortOrder)
-              .map((item) => (
-                <TabsTrigger
-                  key={item.id}
-                  value={item.id}
-                  className={cn(
-                    buttonVariants({ variant: "link", size: "sm" }),
+        <aside className="max-h-svh lg:min-w-56 flex sm:flex-col items-center justify-between sm:justify-start  px-4 ">
+          <div className=" sm:text-4xl sm:mb-4 relative">
+            {name} <EditWebsiteName portfolioId={portfolioId} name={name} />
+          </div>
+          <TabsList className=" h-fit flex flex-row lg:flex-col gap-2 justify-start items-start bg-background group ">
+            <div className="hidden sm:block">
+              {items
+                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .map((item) => (
+                  <TabsTrigger
+                    key={item.id}
+                    value={item.id}
+                    className={cn(
+                      buttonVariants({ variant: "link", size: "sm" }),
 
-                    "bg-muted hover:bg-muted lg:w-full w-fit"
-                  )}
-                >
-                  {item.title}
-                </TabsTrigger>
-              ))}
+                      "bg-muted hover:bg-muted lg:w-full w-fit my-2"
+                    )}
+                  >
+                    {item.title}
+                  </TabsTrigger>
+                ))}
+            </div>
+
             <EditSideBarSort pages={items} />
-            {/* <Sidebar items={items} /> */}
+            <div>
+              <ThemeIcon />
+            </div>
+            <div className="flex sm:hidden justify-end  w-full">
+              <div className="hidden sm:block">
+                <ThemeIcon />
+              </div>
+              <MobileNav items={items} />
+            </div>
           </TabsList>
         </aside>
         {items.map((item) => (

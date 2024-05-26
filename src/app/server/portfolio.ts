@@ -36,9 +36,29 @@ export async function createPortfolio({
     await prisma.sections.create({
       data: { page_id: page.id, type: "hero", version: "v0" },
     });
+    revalidatePath("/v1");
     return { newPortfolio };
   } catch (err) {
     console.log(err);
+    return { messg: "error" };
+  }
+}
+
+export async function updatePortfolio({
+  portfolioId,
+  name,
+}: {
+  portfolioId: string;
+  name: string;
+}) {
+  try {
+    await prisma.portfolios.update({
+      where: { id: portfolioId },
+      data: { name },
+    });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
     return { messg: "error" };
   }
 }
@@ -71,6 +91,19 @@ export async function getPortfolioById(id: string) {
   }
 }
 
+export async function deletePortfolio(id: string) {
+  try {
+    await prisma.portfolios.delete({ where: { id } });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
+//Pages
+
 export async function getPagesByPortfolioId(id: string) {
   try {
     const pages = await prisma.pages.findMany({
@@ -88,11 +121,13 @@ export async function getPagesByPortfolioId(id: string) {
   }
 }
 
+// Section
+
 export async function getSectionsByPageId(page_id: string) {
   try {
     const secitons = await prisma.sections.findMany({
       where: { page_id },
-      include: { items: true },
+      include: { items: true, skills: true },
       orderBy: { createdAt: "asc" },
     });
     return secitons;
@@ -102,7 +137,6 @@ export async function getSectionsByPageId(page_id: string) {
   }
 }
 
-// Section
 export async function createSection({
   pageId,
   type,
@@ -172,6 +206,21 @@ export async function createSection({
           name: "Architectural Masterpiece",
           description: "A stunning modern building design.",
         },
+      });
+      revalidatePath(`/v1/admin/${pageId}`);
+      return { messg: "successful" };
+    } else if (type === "skill") {
+      const newSection = await prisma.sections.create({
+        data: {
+          page_id: pageId,
+          type,
+          version,
+          title: "Skills",
+          text: "Here are the web development skills I have mastered.",
+        },
+      });
+      await prisma.skills.create({
+        data: { section_id: newSection.id, name: "Html" },
       });
       revalidatePath(`/v1/admin/${pageId}`);
       return { messg: "successful" };
@@ -280,6 +329,17 @@ export async function updateItems({
   }
 }
 
+export async function deleteItem(id: string) {
+  try {
+    await prisma.items.delete({ where: { id } });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
 // Page
 export async function createPage({
   title,
@@ -369,6 +429,72 @@ export async function updateSocialLink({
       where: { id },
       data: { icon, link, portfolio_id },
     });
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
+export async function deleteSociallink(id: string) {
+  try {
+    await prisma.sociallink.delete({ where: { id } });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
+// Skills
+
+export async function createSkill({
+  section_id,
+  name,
+  percent,
+}: {
+  section_id: string;
+  name: string;
+  percent?: string | null;
+}) {
+  try {
+    await prisma.skills.create({ data: { section_id, name, percent } });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
+    return { messg: "error" };
+  }
+}
+
+export async function updateSkill({
+  id,
+  section_id,
+  name,
+  percent,
+}: {
+  id: string;
+  section_id: string;
+  name: string;
+  percent?: string | null;
+}) {
+  try {
+    await prisma.skills.update({
+      where: { id },
+      data: { section_id, name, percent },
+    });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
+export async function deleteSkill(id: string) {
+  try {
+    await prisma.skills.delete({ where: { id } });
+    revalidatePath("/v1");
     return { messg: "successful" };
   } catch (err) {
     console.log(err);

@@ -41,12 +41,11 @@ export async function FooterV0({
           </div>
           <div className=" flex items-start gap-2">
             {sociallinks.map((item, index) => (
-              <div className="relative group/item ">
+              <div className="relative group/item " key={index}>
                 <div className="hidden group-hover/item:flex absolute z-40 -top-6 -right-6">
                   <EditSociallink socialLink={item} />
                 </div>
                 <Link
-                  key={index}
                   href={`https://${item.link}`}
                   className={cn(
                     buttonVariants({ variant: "link", size: "icon" })

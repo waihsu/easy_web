@@ -56,30 +56,9 @@ export function AboutSectionV2({ section }: { section: sections }) {
               ? section.title
               : "Crafting Elegant Digital Experiences"}
           </h2>
-          {section.text ? (
-            section.text
-              .split("\\")
-              .map((item, index) => <p key={index}>{item}</p>)
-          ) : (
-            <div>
-              <p className="text-gray-500 md:text-xl dark:text-gray-400">
-                As a seasoned software engineer, I've dedicated my career to
-                pushing the boundaries of what's possible. With a deep
-                understanding of cutting-edge technologies and a relentless
-                drive to create, I thrive on the challenge of transforming
-                complex problems into elegant, user-centric solutions.
-              </p>
-              <p className="text-gray-500 md:text-xl dark:text-gray-400">
-                My passion for innovation is fueled by a genuine desire to make
-                a positive impact on the world. I'm not just a technician, but a
-                visionary who sees the potential in every project to
-                revolutionize industries, empower communities, and inspire
-                change. Through my work, I strive to create experiences that are
-                not only functional, but also captivating, intuitive, and
-                transformative.
-              </p>
-            </div>
-          )}
+          {section.text.split("\\").map((item, index) => (
+            <p key={index}>{item}</p>
+          ))}
         </div>
         <Image
           alt="About"

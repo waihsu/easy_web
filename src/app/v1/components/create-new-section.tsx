@@ -104,6 +104,29 @@ const Sections = [
       },
     ],
   },
+  {
+    name: "Skills",
+    items: [
+      {
+        type: SectionType.skill,
+        version: "v0",
+        image: "/skill-v0.png",
+        customData: undefined,
+      },
+      {
+        type: SectionType.skill,
+        version: "v1",
+        image: "/skill-v1.png",
+        customData: undefined,
+      },
+      {
+        type: SectionType.skill,
+        version: "v2",
+        image: "/skill-v2.png",
+        customData: undefined,
+      },
+    ],
+  },
 ];
 
 export default function CreateNewSection({ pageId }: { pageId: string }) {

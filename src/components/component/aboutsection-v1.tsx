@@ -11,6 +11,7 @@ import EditAboutSection from "@/app/v1/components/edit-about-section";
 import { sections } from "@prisma/client";
 import { JSX, SVGProps } from "react";
 import { toast } from "../ui/use-toast";
+import Image from "next/image";
 
 /** Add fonts into your Next.js project:
 
@@ -58,7 +59,7 @@ export function AboutSectionV1({ section }: { section: sections }) {
           </div>
         </div>
         <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
-          <img
+          <Image
             alt="About"
             className="mx-auto rounded-lg object-cover"
             height="400"

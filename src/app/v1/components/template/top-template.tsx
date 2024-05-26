@@ -8,8 +8,8 @@ import EditSideBarSort from "../edit-sidebar-sort";
 import { Navbar } from "../nav-bar";
 import { ThemeIcon } from "@/components/ThemeIcon";
 import Link from "next/link";
-import MobileNav from "@/components/mobile-nav";
 import { FooterV0 } from "@/components/component/footer-v0";
+import MobileNav from "../mobile-navbar";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLElement> {
   portfolioId: string;
@@ -39,19 +39,16 @@ export default function TopTemplate({
       >
         <TabsList className=" w-full flex justify-between items-center sticky top-0 z-20 shadow-lg py-4 p-8  backdrop-blur-sm bg-background/90  supports-[backdrop-filter]:bg-background/10 group">
           <div className=" flex items-center gap-3">
-            <Link href={"/"}>
-              <span className="text-3xl md:text-5xl font-bold text-primary">
-                {name}
-              </span>
-            </Link>
+            <span className="text-3xl md:text-5xl font-bold text-primary">
+              {name}
+            </span>
+
             <Navbar items={items} />
             <EditSideBarSort pages={items} />
           </div>
-          <div>
-            <div className="hidden sm:block">
-              <ThemeIcon />
-            </div>
-            <MobileNav />
+          <div className=" flex items-center gap-3">
+            <ThemeIcon />
+            <MobileNav items={items} />
           </div>
         </TabsList>
 

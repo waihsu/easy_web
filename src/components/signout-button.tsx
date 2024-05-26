@@ -1,3 +1,4 @@
+"use client";
 import {
   Dialog,
   DialogClose,
@@ -15,7 +16,7 @@ export function SignOut() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"ghost"} size={"sm"} className="w-full text-start">
+        <Button variant={"default"} size={"sm"} className="w-full text-start">
           Sign Out
         </Button>
       </DialogTrigger>

@@ -23,7 +23,11 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createSocialLink, updateSocialLink } from "@/app/server/portfolio";
+import {
+  createSocialLink,
+  deleteSociallink,
+  updateSocialLink,
+} from "@/app/server/portfolio";
 import { toast } from "@/components/ui/use-toast";
 import {
   Select,
@@ -37,6 +41,7 @@ import { FaFacebook, FaTiktok, FaTwitter, FaYoutube } from "react-icons/fa";
 import { Edit } from "lucide-react";
 import { sociallink } from "@prisma/client";
 import { useState } from "react";
+import DeleteDialog from "./delete-dialog";
 
 const formSchema = z.object({
   id: z.string(),
@@ -74,6 +79,17 @@ export function EditSociallink({ socialLink }: { socialLink: sociallink }) {
       toast({ title: messg });
     }
   }
+
+  async function onDelete() {
+    setOpen(false);
+    const { messg } = await deleteSociallink(socialLink.id);
+    if (messg === "error") {
+      toast({ title: messg });
+    } else {
+      toast({ title: messg });
+    }
+  }
+
   return (
     <div className={pathname.startsWith("/v1") ? "inline" : "hidden"}>
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -133,7 +149,10 @@ export function EditSociallink({ socialLink }: { socialLink: sociallink }) {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <div className="flex items-center justify-between">
+                <Button type="submit">Submit</Button>
+                <DeleteDialog callback={onDelete} />
+              </div>
             </form>
           </Form>
         </DialogContent>

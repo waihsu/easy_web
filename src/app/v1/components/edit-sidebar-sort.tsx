@@ -44,7 +44,7 @@ export default function EditSideBarSort({ pages }: { pages: sortProps[] }) {
           <Button
             variant={"ghost"}
             size={"icon"}
-            className=" hidden group-hover:block transition-all duration-300 delay-300 "
+            className="  transition-all duration-300 delay-300 "
           >
             Edit
           </Button>

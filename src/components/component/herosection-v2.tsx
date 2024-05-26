@@ -25,6 +25,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { sections } from "@prisma/client";
 import { toast } from "../ui/use-toast";
 import Link from "next/link";
+import Image from "next/image";
 
 export function HeroSectionV2({ section }: { section: sections }) {
   async function onDelete() {
@@ -60,10 +61,13 @@ export function HeroSectionV2({ section }: { section: sections }) {
           </div>
         </div>
         <div className="relative max-w-lg">
-          <img
+          <Image
+            quality={100}
             alt="Hero Image"
             className="mx-auto aspect-[5/3] overflow-hidden rounded-xl object-cover sm:w-full"
             src={section.image ? section.image : "/placeholder.svg"}
+            height={0}
+            width={0}
           />
         </div>
       </div>

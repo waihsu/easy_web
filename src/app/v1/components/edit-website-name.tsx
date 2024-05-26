@@ -23,46 +23,40 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createSocialLink } from "@/app/server/portfolio";
+import { updatePortfolio } from "@/app/server/portfolio";
 import { toast } from "@/components/ui/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { usePathname } from "next/navigation";
-import { FaFacebook, FaTiktok, FaTwitter, FaYoutube } from "react-icons/fa";
 import { useState } from "react";
+import { Edit } from "lucide-react";
+import { portfolios } from "@prisma/client";
+import { usePathname } from "next/navigation";
 
 const formSchema = z.object({
-  icon: z.string(),
+  name: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
   portfolioId: z.string(),
-  link: z.string(),
 });
-const icons = [
-  { name: "facebook", icon: <FaFacebook /> },
-  { name: "twitter", icon: <FaTwitter /> },
-  { name: "youtube", icon: <FaYoutube /> },
-  { name: "tiktok", icon: <FaTiktok /> },
-];
 
-export function CreateSocialLink({ portfolioId }: { portfolioId: string }) {
-  const [open, setOpen] = useState<boolean>(false);
+export function EditWebsiteName({
+  portfolioId,
+  name,
+}: {
+  portfolioId: string;
+  name: string;
+}) {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      icon: "",
+      name: name,
       portfolioId: portfolioId,
-      link: "",
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { messg } = await createSocialLink(values);
+    const { messg } = await updatePortfolio(values);
     setOpen(false);
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
@@ -74,11 +68,17 @@ export function CreateSocialLink({ portfolioId }: { portfolioId: string }) {
     <div className={pathname.startsWith("/v1") ? "inline" : "hidden"}>
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger asChild>
-          <Button variant="outline">create social link</Button>
+          <Button
+            size={"icon"}
+            onClick={() => setOpen(!open)}
+            variant="outline"
+          >
+            <Edit size={14} />
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Link</DialogTitle>
+            <DialogTitle>Edit</DialogTitle>
             {/* <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription> */}
@@ -87,42 +87,16 @@ export function CreateSocialLink({ portfolioId }: { portfolioId: string }) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="icon"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Icons</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="select icon" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {icons.map((item) => (
-                          <SelectItem value={item.name} key={item.name}>
-                            {item.icon}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="link"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Link</FormLabel>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Link" {...field} />
+                      <Input placeholder="Name" {...field} />
                     </FormControl>
-                    <FormDescription>This is social link..</FormDescription>
+                    <FormDescription>
+                      This is your website name.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
