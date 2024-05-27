@@ -23,9 +23,7 @@ export default async function AdminNavbar({
           {user?.name}
         </Link>
 
-        <CopyLink
-          link={`https://easy-web-six.vercel.app/public/${portfolioId}`}
-        />
+        <CopyLink link={`https://hsuwai.com/public/${portfolioId}`} />
       </div>
       <div className="flex items-center gap-2">
         {user ? (
