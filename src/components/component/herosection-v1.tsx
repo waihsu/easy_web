@@ -44,12 +44,7 @@ export function HeroSectionV1({ section }: { section: sections }) {
     }
   }
   return (
-    <section
-      className="relative w-full h-[80vh] flex items-center justify-center bg-cover bg-center bg-no-repeat group"
-      style={{
-        backgroundImage: "\"url('/placeholder.svg')\"",
-      }}
-    >
+    <section className="relative w-full h-[80vh] flex items-center justify-center bg-cover bg-center bg-no-repeat group">
       <Image
         alt="Mountains"
         src={section.image ? section.image : "/placeholder.svg"}
