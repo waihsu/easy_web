@@ -18,15 +18,14 @@ export default function layout({ children }: { children: React.ReactNode }) {
           >
             <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
           </svg>
-          Imagine Stories
+          Easy Web
         </div>
         <div className="relative mt-auto">
           <p className="  sm:text-3xl">
-            Dive into a universe of endless possibilities with StoryVerse, where
-            every click opens the door to a new adventure. From gripping sci-fi
-            sagas to heartwarming romances, our collection of short stories will
-            transport you to realms beyond your wildest dreams. Login and unlock
-            the magic of storytelling today!
+            EasyWeb is your go-to solution for creating stunning websites with
+            minimal effort. Designed for both beginners and professionals,
+            EasyWeb combines intuitive design tools with powerful features,
+            allowing you to bring your web projects to life seamlessly.
           </p>
         </div>
         <div className="relative z-20 mt-auto">
