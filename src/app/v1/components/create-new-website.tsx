@@ -34,7 +34,7 @@ const formSchema = z.object({
   name: z
     .string({ required_error: "Name is required" })
     .min(3, "Name must be more than 3 letter")
-    .max(6, "max is 6"),
+    .max(9, "max is 9"),
   template: z
     .string({ required_error: "Template required" })
     .min(1, "Must be choose"),
