@@ -23,40 +23,45 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updatePortfolio } from "@/app/server/portfolio";
+import { createPage, deletePage, updatePage } from "@/app/server/portfolio";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { pages } from "@prisma/client";
 import { Edit } from "lucide-react";
-import { portfolios } from "@prisma/client";
+import DeleteDialog from "./delete-dialog";
 import { usePathname } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
+  id: z.string(),
+  title: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  portfolioId: z.string(),
 });
 
-export function EditWebsiteName({
-  portfolioId,
-  name,
-}: {
-  portfolioId: string;
-  name: string;
-}) {
+export function EditPage({ id, title }: { id: string; title: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: name,
-      portfolioId: portfolioId,
+      id: id,
+      title: title,
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { messg } = await updatePortfolio(values);
+    const { messg } = await updatePage(values);
+    setOpen(false);
+    if (messg === "error") {
+      toast({ title: messg, variant: "destructive" });
+    } else {
+      toast({ title: messg });
+    }
+  }
+
+  async function onDelete() {
+    const { messg } = await deletePage(id);
     setOpen(false);
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
@@ -72,30 +77,28 @@ export function EditWebsiteName({
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit</DialogTitle>
-            {/* <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription> */}
+            <DialogTitle>Edit Page</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="name"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Name" {...field} />
+                      <Input placeholder="Page Title" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is your website name.
-                    </FormDescription>
+                    <FormDescription>This is your page name.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <div className="flex items-center justify-between">
+                <Button type="submit">Submit</Button>
+                <DeleteDialog callback={onDelete} />
+              </div>
             </form>
           </Form>
         </DialogContent>

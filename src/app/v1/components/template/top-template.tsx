@@ -10,6 +10,7 @@ import { ThemeIcon } from "@/components/ThemeIcon";
 import Link from "next/link";
 import { FooterV0 } from "@/components/component/footer-v0";
 import MobileNav from "../mobile-navbar";
+import { EditWebsiteName } from "../edit-website-name";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLElement> {
   portfolioId: string;
@@ -39,9 +40,12 @@ export default function TopTemplate({
       >
         <TabsList className=" w-full flex justify-between items-center sticky top-0 z-20 shadow-lg py-4 p-8  backdrop-blur-sm bg-background/90  supports-[backdrop-filter]:bg-background/10 group">
           <div className=" flex items-center gap-3">
-            <span className="text-3xl md:text-5xl font-bold text-primary">
-              {name}
-            </span>
+            <div className=" sm:text-4xl  relative w-full flex justify-start ">
+              <p className=" text-primary uppercase">{name}</p>
+              <div className="">
+                <EditWebsiteName portfolioId={portfolioId} name={name} />
+              </div>
+            </div>
 
             <Navbar items={items} />
             <EditSideBarSort pages={items} />

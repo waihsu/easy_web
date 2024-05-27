@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { TabsTrigger } from "@/components/ui/tabs";
+import { EditPage } from "./edit-page";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -24,17 +25,21 @@ export function Navbar({ className, items, ...props }: SidebarNavProps) {
       {...props}
     >
       {items.map((item) => (
-        <TabsTrigger
-          key={item.id}
-          value={item.id}
-          className={cn(
-            buttonVariants({ variant: "link", size: "sm" }),
+        <div key={item.id} className=" relative">
+          <div className=" absolute top-0 right-0">
+            <EditPage id={item.id} title={item.title} />
+          </div>
+          <TabsTrigger
+            value={item.id}
+            className={cn(
+              buttonVariants({ variant: "link", size: "sm" }),
 
-            "bg-background hover:bg-muted  w-fit "
-          )}
-        >
-          {item.title}
-        </TabsTrigger>
+              "bg-background hover:bg-muted  w-fit "
+            )}
+          >
+            {item.title}
+          </TabsTrigger>
+        </div>
       ))}
     </nav>
   );

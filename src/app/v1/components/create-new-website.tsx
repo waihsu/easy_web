@@ -51,8 +51,8 @@ export default function CreateNewWeb() {
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { messg, newPortfolio } = await createPortfolio(values);
-    if (messg === "error") {
-      toast({ title: "Error", variant: "destructive" });
+    if (!newPortfolio) {
+      toast({ title: messg, variant: "destructive" });
     } else {
       router.push(`/v1/admin/${newPortfolio?.id}`);
     }
@@ -95,7 +95,7 @@ export default function CreateNewWeb() {
                       className={cn(
                         " w-1/2 p-2",
                         form.watch("template") === "top"
-                          ? "bg-muted"
+                          ? "bg-foreground"
                           : "bg-background"
                       )}
                       onClick={() => form.setValue("template", "top")}
@@ -109,7 +109,7 @@ export default function CreateNewWeb() {
                       className={cn(
                         " w-1/2 p-2",
                         form.watch("template") === "left"
-                          ? "bg-muted"
+                          ? "bg-foreground"
                           : "bg-background"
                       )}
                       onClick={() => form.setValue("template", "left")}

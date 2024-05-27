@@ -10,6 +10,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ColorThemes from "@/components/color-themes";
 import { TabsTrigger } from "@/components/ui/tabs";
+import { EditPage } from "./edit-page";
 
 export const sidebarNav = [
   {
@@ -95,9 +96,14 @@ export default function MobileNav({
         {/* <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6 "> */}
         <div className="flex flex-col space-y-3 ml-4 ">
           {items?.map((item, index) => (
-            <MobileLink item={item} key={index} onOpenChange={setOpen}>
-              {item.title}
-            </MobileLink>
+            <div className=" relative" key={index}>
+              <div className=" absolute top-0 right-0 z-20">
+                <EditPage id={item.id} title={item.title} />
+              </div>
+              <MobileLink item={item} onOpenChange={setOpen}>
+                {item.title}
+              </MobileLink>
+            </div>
           ))}
         </div>
 
@@ -123,7 +129,7 @@ function MobileLink({ item, onOpenChange, children }: MobileLinkProps) {
       className={cn(
         buttonVariants({ variant: "link", size: "sm" }),
 
-        "bg-background hover:bg-muted  w-full "
+        "bg-background hover:bg-muted  w-full"
       )}
     >
       {children}

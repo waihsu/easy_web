@@ -25,8 +25,27 @@ export async function createPortfolio({
 }) {
   try {
     const session = await auth();
+    const user = session?.user;
     const user_id = session?.user.id;
     if (!user_id) return { messg: "error" };
+    if (user?.role === "FREE") {
+      const existWebs = await prisma.portfolios.findMany({
+        where: { userId: user_id },
+      });
+      if (existWebs.length >= 3)
+        return { messg: "Your are not premium account" };
+      const newPortfolio = await prisma.portfolios.create({
+        data: { name, userId: user_id, template },
+      });
+      const page = await prisma.pages.create({
+        data: { portfolio_id: newPortfolio.id },
+      });
+      await prisma.sections.create({
+        data: { page_id: page.id, type: "hero", version: "v0" },
+      });
+      revalidatePath("/v1");
+      return { newPortfolio };
+    }
     const newPortfolio = await prisma.portfolios.create({
       data: { name, userId: user_id, template },
     });
@@ -380,6 +399,30 @@ export async function updatePageOrder({
     return { messg: "error" };
   }
 }
+
+export async function updatePage({ id, title }: { id: string; title: string }) {
+  try {
+    await prisma.pages.update({ where: { id }, data: { title } });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
+export async function deletePage(id: string) {
+  try {
+    await prisma.pages.delete({ where: { id } });
+    revalidatePath("/v1");
+    return { messg: "successful" };
+  } catch (err) {
+    console.log(err);
+    return { messg: "error" };
+  }
+}
+
+//social link
 
 export async function getSocialLinks(portfolio_id: string) {
   try {

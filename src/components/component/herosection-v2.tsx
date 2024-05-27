@@ -66,8 +66,8 @@ export function HeroSectionV2({ section }: { section: sections }) {
             alt="Hero Image"
             className="mx-auto aspect-[5/3] overflow-hidden rounded-xl object-cover sm:w-full"
             src={section.image ? section.image : "/placeholder.svg"}
-            height={0}
-            width={0}
+            height={400}
+            width={400}
           />
         </div>
       </div>

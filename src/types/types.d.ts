@@ -5,7 +5,7 @@ declare module "next-auth" {
    */
   interface User {
     id: string;
-    role: string;
+    role: UserRole;
     email: string;
   }
   /**
@@ -20,7 +20,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      role: string;
+      role: UserRole;
       name: string;
       email: string;
       image: string;
@@ -28,6 +28,7 @@ declare module "next-auth" {
   }
 }
 
+import { UserRole } from "@prisma/client";
 // The `JWT` interface can be found in the `next-auth/jwt` submodule
 import { JWT } from "next-auth/jwt";
 

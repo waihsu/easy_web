@@ -75,7 +75,7 @@ export default function EditHeroSection({ section }: { section: sections }) {
         <DialogTrigger asChild>
           <Button>Edit</Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="max-h-[90%] overflow-y-scroll">
           <DialogHeader>
             <DialogTitle>Are you absolutely sure?</DialogTitle>
             <DialogDescription>

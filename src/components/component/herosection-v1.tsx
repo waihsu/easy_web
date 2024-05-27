@@ -79,7 +79,7 @@ export function HeroSectionV1({ section }: { section: sections }) {
         <div className="mt-10">
           <Link
             className={buttonVariants({ variant: "default" })}
-            href={String(section.link)}
+            href={`https://${String(section.link)}`}
           >
             Get Started
           </Link>
