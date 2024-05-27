@@ -59,7 +59,7 @@ export default function page() {
             <h1 className=" text-3xl font-bold">{doc.title}</h1>
             <div className=" my-6">
               {doc.items.map((item, index) => (
-                <p key={index} className="ml-4 font-semibold my-3">
+                <p key={index} className="ml-10 font-semibold my-3">
                   {item.text}
                 </p>
               ))}
