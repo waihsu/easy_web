@@ -48,6 +48,7 @@ const formSchema = z.object({
 
 export function EditSkill({ skill }: { skill: skills }) {
   const [open, setOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,8 +62,10 @@ export function EditSkill({ skill }: { skill: skills }) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const { messg } = await updateSkill(values);
     setOpen(false);
+    setLoading(false);
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
     } else {
@@ -144,7 +147,9 @@ export function EditSkill({ skill }: { skill: skills }) {
                 )}
               />
               <div className="flex items-center justify-between">
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={loading}>
+                  Submit
+                </Button>
                 <DeleteDialog callback={onDelete} />
               </div>
             </form>

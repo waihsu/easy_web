@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -42,6 +42,7 @@ const formSchema = z.object({
 
 export default function CreateNewWeb() {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,7 +51,9 @@ export default function CreateNewWeb() {
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const { messg, newPortfolio } = await createPortfolio(values);
+    setLoading(false);
     if (!newPortfolio) {
       toast({ title: messg, variant: "destructive" });
     } else {
@@ -124,7 +127,9 @@ export default function CreateNewWeb() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={loading}>
+              Submit
+            </Button>
           </form>
         </Form>
       </DialogContent>

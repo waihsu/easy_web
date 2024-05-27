@@ -131,7 +131,6 @@ const Sections = [
 
 export default function CreateNewSection({ pageId }: { pageId: string }) {
   const pathname = usePathname();
-  console.log(pathname);
   const [open, setOpen] = useState(false);
   async function onSubmit({
     pageId,

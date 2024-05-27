@@ -46,6 +46,7 @@ export function EditWebsiteName({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,8 +57,10 @@ export function EditWebsiteName({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const { messg } = await updatePortfolio(values);
     setOpen(false);
+    setLoading(false);
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
     } else {
@@ -95,7 +98,9 @@ export function EditWebsiteName({
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={loading}>
+                Submit
+              </Button>
             </form>
           </Form>
         </DialogContent>

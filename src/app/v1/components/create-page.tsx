@@ -37,6 +37,7 @@ const formSchema = z.object({
 
 export function CreatePage({ portfolioId }: { portfolioId: string }) {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,8 +49,10 @@ export function CreatePage({ portfolioId }: { portfolioId: string }) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const { messg } = await createPage(values);
     setOpen(false);
+    setLoading(false);
     router.refresh();
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
@@ -87,7 +90,9 @@ export function CreatePage({ portfolioId }: { portfolioId: string }) {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={loading}>
+              Submit
+            </Button>
           </form>
         </Form>
       </DialogContent>

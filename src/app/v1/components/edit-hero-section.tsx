@@ -45,6 +45,7 @@ export default function EditHeroSection({ section }: { section: sections }) {
   const pathname = usePathname();
   const router = useRouter();
   const [uploaded, setUploaded] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,8 +60,10 @@ export default function EditHeroSection({ section }: { section: sections }) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const { messg } = await updateSection(values);
     setOpen(false);
+    setLoading(false);
     if (messg === "error") {
       toast({ title: messg });
       router.refresh();
@@ -168,7 +171,9 @@ export default function EditHeroSection({ section }: { section: sections }) {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={loading}>
+                Submit
+              </Button>
             </form>
           </Form>
         </DialogContent>

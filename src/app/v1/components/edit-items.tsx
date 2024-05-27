@@ -49,6 +49,7 @@ export default function EditItems({ item }: { item: items }) {
   const router = useRouter();
   const [uploaded, setUploaded] = useState(false);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
@@ -62,9 +63,10 @@ export default function EditItems({ item }: { item: items }) {
   });
 
   async function onSubmit(values: z.infer<typeof itemSchema>) {
+    setLoading(true);
     const validValues = itemSchema.safeParse(values);
-    console.log(validValues);
     setOpen(false);
+    setLoading(false);
     const { messg } = await updateItems(values);
     if (messg === "error") {
       toast({ title: messg });
@@ -194,7 +196,9 @@ export default function EditItems({ item }: { item: items }) {
                 )}
               />
               <div className="flex items-center justify-between">
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={loading}>
+                  Submit
+                </Button>
                 <DeleteDialog callback={onDelete} />
               </div>
             </form>

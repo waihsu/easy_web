@@ -42,6 +42,7 @@ export function EditPage({ id, title }: { id: string; title: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,8 +53,10 @@ export function EditPage({ id, title }: { id: string; title: string }) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const { messg } = await updatePage(values);
     setOpen(false);
+    setLoading(false);
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
       router.refresh();
@@ -102,7 +105,9 @@ export function EditPage({ id, title }: { id: string; title: string }) {
                 )}
               />
               <div className="flex items-center justify-between">
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={loading}>
+                  Submit
+                </Button>
                 <DeleteDialog callback={onDelete} />
               </div>
             </form>
