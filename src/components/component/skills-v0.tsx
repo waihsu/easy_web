@@ -1,3 +1,4 @@
+"use client";
 import { sections, skills } from "@prisma/client";
 import { SiAdobeaftereffects } from "react-icons/si";
 import { SiAdobeaudition } from "react-icons/si";
@@ -22,6 +23,10 @@ import { SiPrisma } from "react-icons/si";
 import { CreateSkill } from "@/app/v1/components/create-skill";
 import { Card } from "../ui/card";
 import { EditSkill } from "@/app/v1/components/edit-skill";
+import EditAboutSection from "@/app/v1/components/edit-about-section";
+import DeleteDialog from "@/app/v1/components/delete-dialog";
+import { deleteSection } from "@/app/server/portfolio";
+import { toast } from "../ui/use-toast";
 
 export const icons = [
   { name: "Adobeaftereffect", icon: <SiAdobeaftereffects size={20} /> },
@@ -52,10 +57,22 @@ export function Skillsv0({
   section: sections;
   skills: skills[];
 }) {
+  async function onDelete() {
+    const { messg } = await deleteSection(section.id);
+    if (messg === "error") {
+      toast({ title: messg, variant: "destructive" });
+    } else {
+      toast({ title: messg });
+    }
+  }
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 relative group container">
       <div className="hidden group-hover:flex justify-center  items-center transition-all duration-300 delay-300 absolute left-0 top-0">
         <CreateSkill section_id={section.id} />
+      </div>
+      <div className="transition-all duration-300 delay-300 absolute right-0 top-0 hidden group-hover:block">
+        <EditAboutSection section={section} />
+        <DeleteDialog callback={onDelete} />
       </div>
       <div className="container  px-4 md:px-6">
         <div className="space-y-4 md:space-y-6">

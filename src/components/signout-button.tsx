@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function SignOut() {
+  const router = useRouter();
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -26,7 +27,8 @@ export function SignOut() {
           <form
             action={() => {
               signOut();
-              redirect("/");
+              router.push("/");
+              router.refresh();
             }}
             className="flex gap-2"
           >
