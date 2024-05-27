@@ -26,6 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createPage } from "@/app/server/portfolio";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -35,6 +36,7 @@ const formSchema = z.object({
 });
 
 export function CreatePage({ portfolioId }: { portfolioId: string }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,6 +50,7 @@ export function CreatePage({ portfolioId }: { portfolioId: string }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { messg } = await createPage(values);
     setOpen(false);
+    router.refresh();
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
     } else {

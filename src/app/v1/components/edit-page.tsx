@@ -29,7 +29,7 @@ import { useState } from "react";
 import { pages } from "@prisma/client";
 import { Edit } from "lucide-react";
 import DeleteDialog from "./delete-dialog";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const formSchema = z.object({
   id: z.string(),
@@ -40,6 +40,7 @@ const formSchema = z.object({
 
 export function EditPage({ id, title }: { id: string; title: string }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,18 +56,23 @@ export function EditPage({ id, title }: { id: string; title: string }) {
     setOpen(false);
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
+      router.refresh();
     } else {
       toast({ title: messg });
+      router.refresh();
     }
   }
 
   async function onDelete() {
     const { messg } = await deletePage(id);
     setOpen(false);
+
     if (messg === "error") {
       toast({ title: messg, variant: "destructive" });
+      router.refresh();
     } else {
       toast({ title: messg });
+      router.refresh();
     }
   }
   return (
