@@ -18,6 +18,8 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+import "react-photo-view/dist/react-photo-view.css";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 import { deleteSection } from "@/app/server/portfolio";
 import AddItems from "@/app/v1/components/add-items";
 import DeleteDialog from "@/app/v1/components/delete-dialog";
@@ -28,6 +30,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
 import EditItems from "@/app/v1/components/edit-items";
+import { Button } from "../ui/button";
 
 export function GalleryV0({
   section,
@@ -67,36 +70,48 @@ export function GalleryV0({
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 md:p-8">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="relative group/item overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-transform duration-300 ease-in-out hover:-translate-y-2"
-          >
-            <div className="hidden group-hover/item:block absolute z-40 bottom-0 right-0">
-              <EditItems item={item} />
+      <PhotoProvider
+        speed={() => 800}
+        easing={(type) =>
+          type === 2
+            ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+            : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+        }
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 md:p-8">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="relative group/item overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-transform duration-300 ease-in-out hover:-translate-y-2"
+            >
+              <div className="hidden group-hover/item:block absolute z-40 bottom-0 right-0">
+                <EditItems item={item} />
+              </div>
+
+              <Image
+                alt="Image 1"
+                placeholder="blur"
+                blurDataURL={keyStr}
+                loading="lazy"
+                className="object-cover w-full h-64 group-hover/item:scale-105 transition-transform duration-300 ease-in-out"
+                height="400"
+                src={item.image ? item.image : "/placeholder.svg"}
+                style={{
+                  aspectRatio: "400/400",
+                  objectFit: "cover",
+                }}
+                width="400"
+              />
+              <div className="hidden group-hover/item:block absolute z-40 bottom-0 left-0">
+                <PhotoView src={item.image ? item.image : "/placeholder.svg"}>
+                  <Button size={"sm"}>View</Button>
+                </PhotoView>
+              </div>
+              <div className="absolute inset-0 bg-black/20 group-hover/item:bg-black/30 transition-colors duration-300 ease-in-out" />
             </div>
-            <Link className="absolute inset-0 z-10" href={String(item.link)}>
-              <span className="sr-only">View</span>
-            </Link>
-            <Image
-              alt="Image 1"
-              placeholder="blur"
-              blurDataURL={keyStr}
-              loading="lazy"
-              className="object-cover w-full h-64 group-hover:scale-105 transition-transform duration-300 ease-in-out"
-              height="400"
-              src={item.image ? item.image : "/placeholder.svg"}
-              style={{
-                aspectRatio: "400/400",
-                objectFit: "cover",
-              }}
-              width="400"
-            />
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300 ease-in-out" />
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </PhotoProvider>
     </section>
   );
 }

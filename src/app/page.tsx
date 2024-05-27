@@ -96,61 +96,70 @@ export default function App() {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-            <Card className="rounded-lg overflow-hidden bg-card shadow-lg">
-              <Image
-                alt="Portfolio Example 1"
-                className="w-full h-48 object-cover"
-                height="300"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "400/300",
-                  objectFit: "cover",
-                }}
-                width="400"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-bold">John Doe</h3>
-                <p className="text-gray-500 dark:text-gray-400">
-                  Graphic Designer
-                </p>
-              </div>
-            </Card>
-            <Card className="rounded-lg overflow-hidden bg-card shadow-lg">
-              <Image
-                alt="Portfolio Example 2"
-                className="w-full h-48 object-cover"
-                height="300"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "400/300",
-                  objectFit: "cover",
-                }}
-                width="400"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-bold">Jane Smith</h3>
-                <p className="text-gray-500 dark:text-gray-400">
-                  Web Developer
-                </p>
-              </div>
-            </Card>
-            <Card className="rounded-lg overflow-hidden bg-card shadow-lg">
-              <Image
-                alt="Portfolio Example 3"
-                className="w-full h-48 object-cover"
-                height="300"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "400/300",
-                  objectFit: "cover",
-                }}
-                width="400"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-bold">Michael Johnson</h3>
-                <p className="text-gray-500 dark:text-gray-400">Photographer</p>
-              </div>
-            </Card>
+            <Link href="https://easy-web-six.vercel.app/public/clwolrm540000p5opdi9l64k8">
+              <Card className="rounded-lg overflow-hidden bg-card shadow-lg">
+                <Image
+                  alt="Portfolio Example 1"
+                  className="w-full h-48 object-cover"
+                  height="300"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: "400/300",
+                    objectFit: "cover",
+                  }}
+                  width="400"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-bold">John Doe</h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Graphic Designer
+                  </p>
+                </div>
+              </Card>
+            </Link>
+
+            <Link href="https://easy-web-six.vercel.app/public/clwoo1x210000utsg0nu0ajhv">
+              <Card className="rounded-lg overflow-hidden bg-card shadow-lg">
+                <Image
+                  alt="Portfolio Example 2"
+                  className="w-full h-48 object-cover"
+                  height="300"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: "400/300",
+                    objectFit: "cover",
+                  }}
+                  width="400"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-bold">Jane Smith</h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Web Developer
+                  </p>
+                </div>
+              </Card>
+            </Link>
+            <Link href="https://easy-web-six.vercel.app/public/clwoolvja00009fmnh259hzp6">
+              <Card className="rounded-lg overflow-hidden bg-card shadow-lg">
+                <Image
+                  alt="Portfolio Example 3"
+                  className="w-full h-48 object-cover"
+                  height="300"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: "400/300",
+                    objectFit: "cover",
+                  }}
+                  width="400"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-bold">Michael Johnson</h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Photographer
+                  </p>
+                </div>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>

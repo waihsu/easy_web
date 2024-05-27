@@ -4,20 +4,8 @@
  * @see https://v0.dev/t/pcZuQijOpUV
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
-
-/** Add fonts into your Next.js project:
-
-import { Inter } from 'next/font/google'
-
-inter({
-  subsets: ['latin'],
-  display: 'swap',
-})
-
-To read more about using these font, please visit the Next.js documentation:
-- App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
-- Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
-**/
+import "react-photo-view/dist/react-photo-view.css";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 import { deleteSection } from "@/app/server/portfolio";
 import { items, sections } from "@prisma/client";
 import Image from "next/image";
@@ -27,6 +15,7 @@ import AddItems from "@/app/v1/components/add-items";
 import EditAboutSection from "@/app/v1/components/edit-about-section";
 import DeleteDialog from "@/app/v1/components/delete-dialog";
 import EditItems from "@/app/v1/components/edit-items";
+import { Button } from "../ui/button";
 
 export function GalleryV2({
   section,
@@ -64,39 +53,50 @@ export function GalleryV2({
           </div>
         </div>
       </div>
-      <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="relative group/item overflow-hidden rounded-lg"
-          >
-            <div className="hidden group-hover/item:block absolute z-40 bottom-0 right-0">
-              <EditItems item={item} />
+      <PhotoProvider
+        speed={() => 800}
+        easing={(type) =>
+          type === 2
+            ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+            : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+        }
+      >
+        <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="relative group/item overflow-hidden rounded-lg"
+            >
+              <div className="hidden group-hover/item:block absolute z-40 bottom-0 right-0">
+                <EditItems item={item} />
+              </div>
+              <div className="hidden group-hover/item:block absolute z-40 bottom-0 left-0">
+                <PhotoView src={item.image ? item.image : "/placeholder.svg"}>
+                  <Button size={"sm"}>View</Button>
+                </PhotoView>
+              </div>
+              <Image
+                quality={100}
+                loading="lazy"
+                alt="Image 1"
+                className="object-cover w-full h-60 group-hover/item:scale-110 transition-transform duration-300 ease-in-out"
+                height="300"
+                src={item.image ? item.image : "/placeholder.svg"}
+                style={{
+                  aspectRatio: "300/300",
+                  objectFit: "cover",
+                }}
+                width="400"
+              />
+              <div className="absolute inset-0 bg-black/70 group-hover:opacity-90 transition-opacity flex items-center justify-center">
+                <h3 className="text-white font-semibold text-lg tracking-tight">
+                  {item.name}
+                </h3>
+              </div>
             </div>
-            <Link className="absolute inset-0 z-10" href="#">
-              <span className="sr-only">View Image</span>
-            </Link>
-            <Image
-              quality={100}
-              loading="lazy"
-              alt="Image 1"
-              className="object-cover w-full h-60 group-hover/item:scale-110 transition-transform duration-300 ease-in-out"
-              height="300"
-              src={item.image ? item.image : "/placeholder.svg"}
-              style={{
-                aspectRatio: "300/300",
-                objectFit: "cover",
-              }}
-              width="400"
-            />
-            <div className="absolute inset-0 bg-black/70 group-hover:opacity-90 transition-opacity flex items-center justify-center">
-              <h3 className="text-white font-semibold text-lg tracking-tight">
-                {item.name}
-              </h3>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </PhotoProvider>
     </section>
   );
 }

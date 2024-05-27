@@ -5,19 +5,8 @@
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 
-/** Add fonts into your Next.js project:
-
-import { Inter } from 'next/font/google'
-
-inter({
-  subsets: ['latin'],
-  display: 'swap',
-})
-
-To read more about using these font, please visit the Next.js documentation:
-- App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
-- Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
-**/
+import "react-photo-view/dist/react-photo-view.css";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 import { deleteSection } from "@/app/server/portfolio";
 import AddItems from "@/app/v1/components/add-items";
 import DeleteDialog from "@/app/v1/components/delete-dialog";
@@ -27,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "../ui/use-toast";
 import EditItems from "@/app/v1/components/edit-items";
+import { Button } from "../ui/button";
 
 export function GalleryV1({
   section,
@@ -64,40 +54,51 @@ export function GalleryV1({
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8 py-12 md:py-16 lg:py-20">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="group/item relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <div className="hidden group-hover/item:block absolute z-40 bottom-0 right-0">
-              <EditItems item={item} />
+      <PhotoProvider
+        speed={() => 800}
+        easing={(type) =>
+          type === 2
+            ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+            : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+        }
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8 py-12 md:py-16 lg:py-20">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="group/item relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <div className="hidden group-hover/item:block absolute z-40 bottom-0 right-0">
+                <EditItems item={item} />
+              </div>
+              <div className="hidden group-hover/item:block absolute z-40 bottom-0 left-0">
+                <PhotoView src={item.image ? item.image : "/placeholder.svg"}>
+                  <Button size={"sm"}>View</Button>
+                </PhotoView>
+              </div>
+              <Image
+                alt="Gallery Image 1"
+                className="object-cover w-full h-72 group-hover:scale-105 transition-transform duration-300"
+                height="400"
+                quality={100}
+                loading="lazy"
+                src="/placeholder.svg"
+                style={{
+                  aspectRatio: "600/400",
+                  objectFit: "cover",
+                }}
+                width="600"
+              />
+              <div className="bg-white p-4 dark:bg-gray-950">
+                <h3 className="font-bold text-xl">{item.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {item.description}
+                </p>
+              </div>
             </div>
-            <Link className="absolute inset-0 z-10" href={String(item.link)}>
-              <span className="sr-only">View</span>
-            </Link>
-            <Image
-              alt="Gallery Image 1"
-              className="object-cover w-full h-72 group-hover:scale-105 transition-transform duration-300"
-              height="400"
-              quality={100}
-              loading="lazy"
-              src="/placeholder.svg"
-              style={{
-                aspectRatio: "600/400",
-                objectFit: "cover",
-              }}
-              width="600"
-            />
-            <div className="bg-white p-4 dark:bg-gray-950">
-              <h3 className="font-bold text-xl">{item.name}</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {item.description}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </PhotoProvider>
     </section>
   );
 }
