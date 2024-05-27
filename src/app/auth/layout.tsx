@@ -22,10 +22,8 @@ export default function layout({ children }: { children: React.ReactNode }) {
         </div>
         <div className="relative mt-auto">
           <p className="  sm:text-3xl">
-            EasyWeb is your go-to solution for creating stunning websites with
-            minimal effort. Designed for both beginners and professionals,
-            EasyWeb combines intuitive design tools with powerful features,
-            allowing you to bring your web projects to life seamlessly.
+            Our website builder allows you to create professional-looking
+            websites without any coding knowledge.
           </p>
         </div>
         <div className="relative z-20 mt-auto">
@@ -35,7 +33,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
               helped me deliver stunning designs to my clients faster than ever
               before.&rdquo;
             </p>
-            <footer className="text-sm">Sofia Davis</footer>
+            {/* <footer className="text-sm">Sofia Davis</footer> */}
           </blockquote>
         </div>
       </div>
