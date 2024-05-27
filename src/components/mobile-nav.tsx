@@ -74,7 +74,7 @@ export default function MobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <span className=" text-xl font-bold">KAUNG</span>
+        <span className=" text-xl font-bold">Easy Web</span>
 
         {/* <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6 "> */}
         <div className="flex flex-col space-y-3 ml-4 ">

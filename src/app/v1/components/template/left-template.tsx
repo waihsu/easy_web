@@ -75,7 +75,7 @@ export default function LeftTemplate({
               <div className="hidden sm:block">
                 <ThemeIcon />
               </div>
-              <MobileNav items={items} />
+              <MobileNav items={items} name={name} />
             </div>
           </TabsList>
         </aside>

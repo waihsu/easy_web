@@ -52,7 +52,7 @@ export default function TopTemplate({
           </div>
           <div className=" flex items-center gap-3">
             <ThemeIcon />
-            <MobileNav items={items} />
+            <MobileNav items={items} name={name} />
           </div>
         </TabsList>
 

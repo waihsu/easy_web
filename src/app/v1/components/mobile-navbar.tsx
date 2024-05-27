@@ -36,6 +36,7 @@ export const sidebarNav = [
 ];
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
+  name: string;
   items: {
     id: string;
     sortOrder: number;
@@ -44,13 +45,14 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export default function MobileNav({
+  name,
   className,
   items,
   ...props
 }: SidebarNavProps) {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
-  console.log(pathname);
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -91,7 +93,7 @@ export default function MobileNav({
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <span className=" text-xl font-bold">KAUNG</span>
+        <span className=" text-xl font-bold">{name}</span>
 
         {/* <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6 "> */}
         <div className="flex flex-col space-y-3 ml-4 ">
